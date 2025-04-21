@@ -2,7 +2,7 @@ const playlists = [];
 let selectedSongs = [];
 
 const createPlaylistBtn = document.getElementById('create-playlist-btn');
-const playListContainer = document.getElementById('playlist-container');
+const playlistContainer = document.getElementById('playlist-container');
 const playlistForm = document.getElementById('playlist-form');
 
 fetch('songs.json')
@@ -17,7 +17,7 @@ createPlaylistBtn.addEventListener('click', () => {
 });
 
 function showPlaylistForm() {
-	playListContainer.innerHTML = '';
+	playlistContainer.innerHTML = '';
 
 	const form = document.createElement('form');
 
@@ -32,7 +32,9 @@ function showPlaylistForm() {
 	const createBtn = document.createElement('button');
 	createBtn.type = 'button';
 	createBtn.textContent = 'Create playlist';
-	// add click to add playlist function
+    createBtn.addEventListener('click', () => {
+        createPlaylist(input)
+    } )
 
 	const cancelBtn = document.createElement('button');
 	cancelBtn.type = 'button';
@@ -40,7 +42,7 @@ function showPlaylistForm() {
 	// add click to cancel creation of a playlist
 
 	form.append(input, songListElement, createBtn, cancelBtn);
-	playListContainer.appendChild(form);
+	playlistContainer.appendChild(form);
 }
 
 function createSongList() {
@@ -73,4 +75,20 @@ function createSongList() {
 	});
 
 	return songList;
+}
+
+function createPlaylist(inputElement) {
+    const playlistName = inputElement.value.trim();
+    if (!playlistName) return;
+
+    const newPlaylist = {
+        name: playlistName,
+        songs: [...selectedSongs],
+    };
+
+    playlists.push(newPlaylist);
+    selectedSongs = [];
+    // renderPlayLists();
+
+    playlistContainer.innerHTML = '';
 }
