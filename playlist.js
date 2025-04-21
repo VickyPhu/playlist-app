@@ -4,6 +4,13 @@ const createPlaylistBtn = document.getElementById('create-playlist-btn');
 const playListContainer = document.getElementById('playlist-container');
 const playlistForm = document.getElementById('playlist-form');
 
+fetch('songs.json')
+	.then((res) => res.json())
+	.then((data) => {
+		songs = data.songs;
+	})
+	.catch((err) => console.error('Could not get songs', err));
+
 createPlaylistBtn.addEventListener('click', () => {
 	showPlaylistForm();
 });
@@ -28,6 +35,6 @@ function showPlaylistForm() {
 	cancelBtn.textContent = 'Cancel';
 	// add click to cancel creation of a playlist
 
-	form.append(input, createBtn, cancelBtn);
+	form.append(input, songListElement, createBtn, cancelBtn);
 	playListContainer.appendChild(form);
 }
