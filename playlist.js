@@ -25,6 +25,9 @@ function showPlaylistForm() {
 	input.placeholder = 'Playlist name';
 	input.required = true;
 
+	const songListElement = createSongList();
+    form.appendChild(songListElement);
+
 	const createBtn = document.createElement('button');
 	createBtn.type = 'button';
 	createBtn.textContent = 'Create playlist';
@@ -37,4 +40,20 @@ function showPlaylistForm() {
 
 	form.append(input, songListElement, createBtn, cancelBtn);
 	playListContainer.appendChild(form);
+}
+
+function createSongList() {
+	const songList = document.createElement('ul');
+
+	songs.forEach((song) => {
+		const songItem = document.createElement('li');
+		const addButton = document.createElement('button');
+		addButton.textContent = 'Lägg till';
+
+		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre}`;
+		songItem.appendChild(addButton);
+		songList.appendChild(songItem);
+	});
+
+	return songList;
 }
