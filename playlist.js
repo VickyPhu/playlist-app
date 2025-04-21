@@ -1,5 +1,5 @@
 const playlists = [];
-const selectedSongs = [];
+let selectedSongs = [];
 
 const createPlaylistBtn = document.getElementById('create-playlist-btn');
 const playListContainer = document.getElementById('playlist-container');
@@ -53,19 +53,19 @@ function createSongList() {
 		const isSelected = selectedSongs.some((s) => s.id === song.id);
 		addButton.textContent = isSelected ? 'Remove' : 'Add';
 
-        addButton.addEventListener('click', (e) => {
-            e.preventDefault();
-        
-            const index = selectedSongs.findIndex((s) => s.id === song.id);
-        
-            if (index === -1) {
-                selectedSongs.push(song);
-                addButton.textContent = 'Remove';
-            } else {
-                selectedSongs.splice(index, 1);
-                addButton.textContent = 'Add';
-            }
-        });
+		addButton.addEventListener('click', (e) => {
+			e.preventDefault();
+
+			const index = selectedSongs.findIndex((s) => s.id === song.id);
+
+			if (index === -1) {
+				selectedSongs.push(song);
+				addButton.textContent = 'Remove';
+			} else {
+				selectedSongs.splice(index, 1);
+				addButton.textContent = 'Add';
+			}
+		});
 
 		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre} `;
 		songItem.appendChild(addButton);
