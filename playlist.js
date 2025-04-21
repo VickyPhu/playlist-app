@@ -1,4 +1,5 @@
 const playlists = [];
+const selectedSongs = [];
 
 const createPlaylistBtn = document.getElementById('create-playlist-btn');
 const playListContainer = document.getElementById('playlist-container');
@@ -26,7 +27,7 @@ function showPlaylistForm() {
 	input.required = true;
 
 	const songListElement = createSongList();
-    form.appendChild(songListElement);
+	form.appendChild(songListElement);
 
 	const createBtn = document.createElement('button');
 	createBtn.type = 'button';
@@ -48,9 +49,25 @@ function createSongList() {
 	songs.forEach((song) => {
 		const songItem = document.createElement('li');
 		const addButton = document.createElement('button');
-		addButton.textContent = 'Lägg till';
 
-		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre}`;
+		const isSelected = selectedSongs.some((s) => s.id === song.id);
+		addButton.textContent = isSelected ? 'Remove' : 'Add';
+
+        addButton.addEventListener('click', (e) => {
+            e.preventDefault();
+        
+            const index = selectedSongs.findIndex((s) => s.id === song.id);
+        
+            if (index === -1) {
+                selectedSongs.push(song);
+                addButton.textContent = 'Remove';
+            } else {
+                selectedSongs.splice(index, 1);
+                addButton.textContent = 'Add';
+            }
+        });
+
+		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre} `;
 		songItem.appendChild(addButton);
 		songList.appendChild(songItem);
 	});
