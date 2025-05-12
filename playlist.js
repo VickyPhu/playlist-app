@@ -5,6 +5,7 @@ let selectedSongs = [];
 const createPlaylistBtn = document.getElementById('create-playlist-btn');
 const playlistContainer = document.getElementById('playlist-container');
 const playlistForm = document.getElementById('playlist-form');
+const container = document.getElementById('main-container');
 
 fetch('songs.json')
 	.then((res) => res.json())
@@ -79,8 +80,8 @@ function createSongList() {
 		});
 
 		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre} `;
-		songItem.appendChild(addButton);
 		songList.appendChild(songItem);
+		songItem.appendChild(addButton);
 	});
 
 	return songList;
@@ -114,5 +115,24 @@ function renderPlaylists() {
 
 		playlistElement.appendChild(playlistTitle);
 		playlistContainer.appendChild(playlistElement);
+		playlistElement.addEventListener('click', () =>
+			showPlaylistSongs(playlist)
+		);
 	});
+}
+
+function showPlaylistSongs(playlist) {
+	container.innerHTML = '';
+
+	const playlistTitle = document.createElement('h1');
+	playlistTitle.textContent = playlist.name;
+
+	const songList = document.createElement('ul');
+	playlist.songs.forEach((song) => {
+		const li = document.createElement('li');
+		li.textContent = `${song.title} - ${song.artist} - ${song.genre}`;
+		songList.appendChild(li);
+	});
+	container.appendChild(playlistTitle);
+	container.appendChild(songList);
 }
