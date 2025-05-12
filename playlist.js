@@ -18,7 +18,9 @@ createPlaylistBtn.addEventListener('click', () => {
 });
 
 function showPlaylistForm() {
+	createPlaylistBtn.style.display = 'none';
 	playlistForm.innerHTML = '';
+	playlistForm.style.display = 'block';
 
 	const form = document.createElement('form');
 
@@ -40,10 +42,16 @@ function showPlaylistForm() {
 	const cancelBtn = document.createElement('button');
 	cancelBtn.type = 'button';
 	cancelBtn.textContent = 'Cancel';
-	// add click to cancel creation of a playlist
+	cancelBtn.addEventListener('click', () => {
+		playlistForm.innerHTML = '';
+		selectedSongs = [];
+		document.getElementById('create-playlist-btn').style.display =
+			'inline-block';
+		playlistForm.style.display = 'none';
+	});
 
 	form.append(input, songListElement, createBtn, cancelBtn);
-	playlistContainer.appendChild(form);
+	playlistForm.appendChild(form);
 }
 
 function createSongList() {
@@ -96,7 +104,7 @@ function createPlaylist(inputElement) {
 }
 
 function renderPlaylists() {
-    console.log('Rendering playlists:', playlists); 
+	console.log('Rendering playlists:', playlists);
 	playlistContainer.innerHTML = '';
 
 	playlists.forEach((playlist) => {
