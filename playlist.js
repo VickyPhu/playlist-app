@@ -1,3 +1,4 @@
+let songs = [];
 const playlists = [];
 let selectedSongs = [];
 
@@ -17,7 +18,7 @@ createPlaylistBtn.addEventListener('click', () => {
 });
 
 function showPlaylistForm() {
-	playlistContainer.innerHTML = '';
+	playlistForm.innerHTML = '';
 
 	const form = document.createElement('form');
 
@@ -31,10 +32,10 @@ function showPlaylistForm() {
 
 	const createBtn = document.createElement('button');
 	createBtn.type = 'button';
-	createBtn.textContent = 'Create playlist';
-    createBtn.addEventListener('click', () => {
-        createPlaylist(input)
-    } )
+	createBtn.textContent = 'Save playlist';
+	createBtn.addEventListener('click', () => {
+		createPlaylist(input);
+	});
 
 	const cancelBtn = document.createElement('button');
 	cancelBtn.type = 'button';
@@ -78,17 +79,32 @@ function createSongList() {
 }
 
 function createPlaylist(inputElement) {
-    const playlistName = inputElement.value.trim();
-    if (!playlistName) return;
+	const playlistName = inputElement.value.trim();
+	if (!playlistName) return;
 
-    const newPlaylist = {
-        name: playlistName,
-        songs: [...selectedSongs],
-    };
+	const newPlaylist = {
+		name: playlistName,
+		songs: [...selectedSongs],
+	};
+	console.log('Skapar spellista:', newPlaylist);
 
-    playlists.push(newPlaylist);
-    selectedSongs = [];
-    // renderPlayLists();
+	playlists.push(newPlaylist);
+	selectedSongs = [];
+	renderPlaylists();
 
-    playlistContainer.innerHTML = '';
+	playlistForm.innerHTML = '';
+}
+
+function renderPlaylists() {
+    console.log('Rendering playlists:', playlists); 
+	playlistContainer.innerHTML = '';
+
+	playlists.forEach((playlist) => {
+		const playlistElement = document.createElement('div');
+		const playlistTitle = document.createElement('h3');
+		playlistTitle.textContent = playlist.name;
+
+		playlistElement.appendChild(playlistTitle);
+		playlistContainer.appendChild(playlistElement);
+	});
 }
