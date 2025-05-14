@@ -3,6 +3,10 @@ const playlists = [];
 let selectedSongs = [];
 
 const createPlaylistBtn = document.getElementById('create-playlist-btn');
+createPlaylistBtn.addEventListener('click', () => {
+	showPlaylistForm();
+});
+
 const playlistContainer = document.getElementById('playlist-container');
 const playlistForm = document.getElementById('playlist-form');
 const container = document.getElementById('main-container');
@@ -14,9 +18,18 @@ fetch('songs.json')
 	})
 	.catch((err) => console.error('Could not get songs', err));
 
-createPlaylistBtn.addEventListener('click', () => {
-	showPlaylistForm();
-});
+function renderStartpage() {
+	createPlaylistBtn.style.display = 'inline-block';
+	playlistForm.style.display = 'none';
+
+	playlistContainer.innerHTML = '';
+	playlists.forEach((playlist, index) => {
+		const div = document.createElement('div');
+		div.textContent = playlist.name;
+		div.addEventListener('click', () => showPlaylistSongs(index));
+		playlistContainer.appendChild(div);
+	});
+}
 
 function showPlaylistForm() {
 	createPlaylistBtn.style.display = 'none';
@@ -104,35 +117,43 @@ function createPlaylist(inputElement) {
 	playlistForm.innerHTML = '';
 }
 
-function renderPlaylists() {
-	console.log('Rendering playlists:', playlists);
-	playlistContainer.innerHTML = '';
+function createPlaylist(input) {
+	if (!input.value.trim() || selectedSongs.length === 0) return;
 
-	playlists.forEach((playlist) => {
-		const playlistElement = document.createElement('div');
-		const playlistTitle = document.createElement('h3');
-		playlistTitle.textContent = playlist.name;
+	const newPlaylist = {
+		name: input.value.trim(),
+		songs: [...selectedSongs],
+	};
 
-		playlistElement.appendChild(playlistTitle);
-		playlistContainer.appendChild(playlistElement);
-		playlistElement.addEventListener('click', () =>
-			showPlaylistSongs(playlist)
-		);
-	});
+	playlists.push(newPlaylist);
+	selectedSongs = [];
+
+	renderStartpage();
 }
 
-function showPlaylistSongs(playlist) {
-	container.innerHTML = '';
+function showPlaylistSongs(index) {
+	const playlist = playlists[index];
 
-	const playlistTitle = document.createElement('h1');
-	playlistTitle.textContent = playlist.name;
+	playlistContainer.innerHTML = '';
+	playlistForm.style.display = 'none';
+	createPlaylistBtn.style.display = 'none';
+
+	const title = document.createElement('h2');
+	title.textContent = playlist.name;
+	playlistContainer.appendChild(title);
 
 	const songList = document.createElement('ul');
 	playlist.songs.forEach((song) => {
-		const li = document.createElement('li');
-		li.textContent = `${song.title} - ${song.artist} - ${song.genre}`;
-		songList.appendChild(li);
+		const songItem = document.createElement('li');
+		songItem.textContent = song.title;
+		songList.appendChild(songItem);
 	});
-	container.appendChild(playlistTitle);
-	container.appendChild(songList);
+	playlistContainer.appendChild(songList);
+
+	const backButton = document.createElement('button');
+	backButton.textContent = 'Tillbaka';
+	backButton.addEventListener('click', () => {
+		renderStartpage();
+	});
+	playlistContainer.appendChild(backButton);
 }
