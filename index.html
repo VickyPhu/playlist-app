@@ -7,11 +7,26 @@
 		<script defer src="playlist.js"></script>
 	</head>
 	<body>
-		<main id="main-container">
-			<h1>My Playlists</h1>
-			<button id="create-playlist-btn">Create Playlist</button>
-			<div id="playlist-form"></div>
-			<section id="playlist-container"></section>
+		<main>
+			<h1>Create a new playlist</h1>
+
+			<section>
+				<form id="playlist-form">
+					<label for="playlist-name">Playlist name:</label>
+					<input type="text" id="playlist-name" name="playlist-name" required />
+
+					<label for="select-song">Add songs:</label>
+					<select
+						name="select-song"
+						id="select-song"
+						multiple
+						size="7"
+					></select>
+
+					<button type="submit">Create playlist</button>
+					<button type="button" id="cancel-btn">Cancel</button>
+				</form>
+			</section>
 		</main>
 	</body>
 </html>
