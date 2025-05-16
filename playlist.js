@@ -6,7 +6,7 @@ const playlistList = document.getElementById('playlist-list');
 const playlists = [];
 let songs = [];
 
-fetch('songs.json')
+fetch('data/songs.json')
 	.then((response) => response.json())
 	.then((data) => {
 		songs = data.songs;
