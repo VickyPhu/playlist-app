@@ -15,13 +15,9 @@
 					<label for="playlist-name">Playlist name:</label>
 					<input type="text" id="playlist-name" name="playlist-name" required />
 
-					<label for="select-song">Add songs:</label>
-					<select
-						name="select-song"
-						id="select-song"
-						multiple
-						size="7"
-					></select>
+					<fieldset id="song-checkboxes">
+						<legend>Select songs:</legend>
+					</fieldset>
 
 					<button type="submit">Create playlist</button>
 					<button type="button" id="cancel-btn">Cancel</button>
