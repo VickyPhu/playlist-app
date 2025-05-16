@@ -21,7 +21,7 @@ function renderSongCheckboxes(songs) {
 	});
 }
 
-function renderPlaylists() {
+function renderPlaylists(playlists) {
 	playlistList.innerHTML = '';
 
 	playlists.forEach((playlist, index) => {
