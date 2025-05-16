@@ -1,0 +1,32 @@
+{
+	"songs": [
+		{ "title": "Ocean Drive", "artist": "Duke Dumont", "genre": "Electronic" },
+		{ "title": "Bohemian Rhapsody", "artist": "Queen", "genre": "Rock" },
+		{ "title": "Blinding Lights", "artist": "The Weeknd", "genre": "Pop" },
+		{ "title": "Shape of You", "artist": "Ed Sheeran", "genre": "Pop" },
+		{ "title": "Enter Sandman", "artist": "Metallica", "genre": "Metal" },
+		{ "title": "Levitating", "artist": "Dua Lipa", "genre": "Pop" },
+		{ "title": "Lose Yourself", "artist": "Eminem", "genre": "Hip-Hop" },
+		{ "title": "Numb", "artist": "Linkin Park", "genre": "Rock" },
+		{ "title": "Stayin' Alive", "artist": "Bee Gees", "genre": "Disco" },
+		{ "title": "Circles", "artist": "Post Malone", "genre": "Hip-Hop" },
+		{ "title": "Watermelon Sugar", "artist": "Harry Styles", "genre": "Pop" },
+		{ "title": "Smooth Criminal", "artist": "Michael Jackson", "genre": "Pop" },
+		{
+			"title": "Smells Like Teen Spirit",
+			"artist": "Nirvana",
+			"genre": "Grunge"
+		},
+		{ "title": "Don't Start Now", "artist": "Dua Lipa", "genre": "Pop" },
+		{
+			"title": "Stairway to Heaven",
+			"artist": "Led Zeppelin",
+			"genre": "Rock"
+		},
+		{ "title": "Closer", "artist": "The Chainsmokers", "genre": "Electronic" },
+		{ "title": "Bad Guy", "artist": "Billie Eilish", "genre": "Alternative" },
+		{ "title": "Peaches", "artist": "Justin Bieber", "genre": "R&B" },
+		{ "title": "One Dance", "artist": "Drake", "genre": "Hip-Hop" },
+		{ "title": "Take On Me", "artist": "A-ha", "genre": "Pop" }
+	]
+}
