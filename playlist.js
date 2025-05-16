@@ -1,159 +1,117 @@
-let songs = [];
+const form = document.getElementById('playlist-form');
+const songCheckboxes = document.getElementById('song-checkboxes');
+const cancelBtn = document.getElementById('cancel-btn');
+const playlistList = document.getElementById('playlist-list');
+
 const playlists = [];
-let selectedSongs = [];
-
-const createPlaylistBtn = document.getElementById('create-playlist-btn');
-createPlaylistBtn.addEventListener('click', () => {
-	showPlaylistForm();
-});
-
-const playlistContainer = document.getElementById('playlist-container');
-const playlistForm = document.getElementById('playlist-form');
-const container = document.getElementById('main-container');
+let songs = [];
 
 fetch('songs.json')
-	.then((res) => res.json())
+	.then((response) => response.json())
 	.then((data) => {
 		songs = data.songs;
+		populateCheckboxes(songs);
 	})
-	.catch((err) => console.error('Could not get songs', err));
+	.catch((error) => console.error('Error loading songs', error));
 
-function renderStartpage() {
-	createPlaylistBtn.style.display = 'inline-block';
-	playlistForm.style.display = 'none';
+function populateCheckboxes(songs) {
+	songs.forEach((song, index) => {
+		const label = document.createElement('label');
+		label.style.display = 'block';
 
-	playlistContainer.innerHTML = '';
+		const checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.value = index;
+		checkbox.name = 'song';
+
+		label.appendChild(checkbox);
+		label.appendChild(
+			document.createTextNode(`${song.title} - ${song.artist}`)
+		);
+		songCheckboxes.appendChild(label);
+	});
+}
+
+form.addEventListener('submit', (e) => {
+	e.preventDefault();
+
+	const name = document.getElementById('playlist-name').value;
+	const selectedIndices = Array.from(
+		document.querySelectorAll('input[name="song"]:checked')
+	).map((checkbox) => parseInt(checkbox.value));
+
+	const selectedSongs = selectedIndices.map((i) => songs[i]);
+
+	console.log(playlists);
+
+	playlists.push({
+		name: name,
+		songs: selectedSongs,
+	});
+
+	form.reset();
+	renderPlaylists();
+});
+
+cancelBtn.addEventListener('click', () => {
+	form.reset();
+});
+
+function renderPlaylists() {
+	playlistList.innerHTML = '';
+
 	playlists.forEach((playlist, index) => {
-		const div = document.createElement('div');
-		div.textContent = playlist.name;
-		div.addEventListener('click', () => showPlaylistSongs(index));
-		playlistContainer.appendChild(div);
-	});
-}
+		const li = document.createElement('li');
+		li.style.cursor = 'pointer';
+		li.style.marginBottom = '10px';
 
-function showPlaylistForm() {
-	createPlaylistBtn.style.display = 'none';
-	playlistForm.innerHTML = '';
-	playlistForm.style.display = 'block';
+		const title = document.createElement('strong');
+		title.textContent = playlist.name;
 
-	const form = document.createElement('form');
+		const songTable = document.createElement('table');
+		songTable.style.display = 'none';
+		songTable.border = 1;
+		songTable.cellPadding = '5';
 
-	const input = document.createElement('input');
-	input.type = 'text';
-	input.placeholder = 'Playlist name';
-	input.required = true;
+		const thead = document.createElement('thead');
+		const headerRow = document.createElement('tr');
 
-	const songListElement = createSongList();
-	form.appendChild(songListElement);
+		const thTitle = document.createElement('th');
+		thTitle.textContent = 'Title';
+		const thArtist = document.createElement('th');
+		thArtist.textContent = 'Artist';
+		const thGenre = document.createElement('th');
+		thGenre.textContent = 'Genre';
 
-	const createBtn = document.createElement('button');
-	createBtn.type = 'button';
-	createBtn.textContent = 'Save playlist';
-	createBtn.addEventListener('click', () => {
-		createPlaylist(input);
-	});
+		headerRow.append(thTitle, thArtist, thGenre);
+		thead.appendChild(headerRow);
+		songTable.appendChild(thead);
 
-	const cancelBtn = document.createElement('button');
-	cancelBtn.type = 'button';
-	cancelBtn.textContent = 'Cancel';
-	cancelBtn.addEventListener('click', () => {
-		playlistForm.innerHTML = '';
-		selectedSongs = [];
-		document.getElementById('create-playlist-btn').style.display =
-			'inline-block';
-		playlistForm.style.display = 'none';
-	});
+		const tbody = document.createElement('tbody');
+		playlist.songs.forEach((song) => {
+			const row = document.createElement('tr');
 
-	form.append(input, songListElement, createBtn, cancelBtn);
-	playlistForm.appendChild(form);
-}
+			const tdTitle = document.createElement('td');
+			tdTitle.textContent = song.title;
 
-function createSongList() {
-	const songList = document.createElement('ul');
+			const tdArtist = document.createElement('td');
+			tdArtist.textContent = song.artist;
 
-	songs.forEach((song) => {
-		const songItem = document.createElement('li');
-		const addButton = document.createElement('button');
+			const tdGenre = document.createElement('td');
+			tdGenre.textContent = song.genre;
 
-		const isSelected = selectedSongs.some((s) => s.id === song.id);
-		addButton.textContent = isSelected ? 'Remove' : 'Add';
+			row.append(tdTitle, tdArtist, tdGenre);
+			tbody.appendChild(row);
+		});
+		songTable.appendChild(tbody);
 
-		addButton.addEventListener('click', (e) => {
-			e.preventDefault();
-
-			const index = selectedSongs.findIndex((s) => s.id === song.id);
-
-			if (index === -1) {
-				selectedSongs.push(song);
-				addButton.textContent = 'Remove';
-			} else {
-				selectedSongs.splice(index, 1);
-				addButton.textContent = 'Add';
-			}
+		li.addEventListener('click', () => {
+			songTable.style.display =
+				songTable.style.display === 'none' ? 'table' : 'none';
 		});
 
-		songItem.textContent = `${song.title} – ${song.artist} - ${song.genre} `;
-		songList.appendChild(songItem);
-		songItem.appendChild(addButton);
+		li.appendChild(title);
+		li.appendChild(songTable);
+		playlistList.appendChild(li);
 	});
-
-	return songList;
-}
-
-function createPlaylist(inputElement) {
-	const playlistName = inputElement.value.trim();
-	if (!playlistName) return;
-
-	const newPlaylist = {
-		name: playlistName,
-		songs: [...selectedSongs],
-	};
-	console.log('Skapar spellista:', newPlaylist);
-
-	playlists.push(newPlaylist);
-	selectedSongs = [];
-	renderPlaylists();
-
-	playlistForm.innerHTML = '';
-}
-
-function createPlaylist(input) {
-	if (!input.value.trim() || selectedSongs.length === 0) return;
-
-	const newPlaylist = {
-		name: input.value.trim(),
-		songs: [...selectedSongs],
-	};
-
-	playlists.push(newPlaylist);
-	selectedSongs = [];
-
-	renderStartpage();
-}
-
-function showPlaylistSongs(index) {
-	const playlist = playlists[index];
-
-	playlistContainer.innerHTML = '';
-	playlistForm.style.display = 'none';
-	createPlaylistBtn.style.display = 'none';
-
-	const title = document.createElement('h2');
-	title.textContent = playlist.name;
-	playlistContainer.appendChild(title);
-
-	const songList = document.createElement('ul');
-	playlist.songs.forEach((song) => {
-		const songItem = document.createElement('li');
-		songItem.textContent = song.title;
-		songList.appendChild(songItem);
-	});
-	playlistContainer.appendChild(songList);
-
-	const backButton = document.createElement('button');
-	backButton.textContent = 'Tillbaka';
-	backButton.addEventListener('click', () => {
-		renderStartpage();
-	});
-	playlistContainer.appendChild(backButton);
 }
