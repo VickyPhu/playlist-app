@@ -1,4 +1,5 @@
-import { renderSongCheckboxes } from '../view/view.js';
+import { addPlaylist, getPlaylists, setSongs } from '../model/model.js';
+import { renderPlaylists, renderSongCheckboxes } from '../view/view.js';
 
 const form = document.getElementById('playlist-form');
 const cancelBtn = document.getElementById('cancel-btn');
@@ -7,8 +8,8 @@ function initApp() {
 	fetch('data/songs.json')
 		.then((response) => response.json())
 		.then((data) => {
-			songs = data.songs;
-			renderSongCheckboxes(songs);
+			setSongs(data.songs);
+			renderSongCheckboxes(data.songs);
 		})
 		.catch((error) => console.error('Error loading songs', error));
 
@@ -20,17 +21,9 @@ function initApp() {
 			document.querySelectorAll('input[name="song"]:checked')
 		).map((checkbox) => parseInt(checkbox.value));
 
-		const selectedSongs = selectedIndices.map((i) => songs[i]);
-
-		console.log(playlists);
-
-		playlists.push({
-			name: name,
-			songs: selectedSongs,
-		});
-
+		addPlaylist(name, selectedIndices);
 		form.reset();
-		renderPlaylists();
+		renderPlaylists(getPlaylists());
 	});
 
 	cancelBtn.addEventListener('click', () => {
