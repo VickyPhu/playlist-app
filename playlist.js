@@ -30,3 +30,23 @@ function populateCheckboxes(songs) {
 		songCheckboxes.appendChild(label);
 	});
 }
+
+form.addEventListener('submit', (e) => {
+	e.preventDefault();
+
+	const name = document.getElementById('playlist-name').value;
+	const selectedIndices = Array.from(
+		document.querySelectorAll('input[name="song"]:checked')
+	).map((checkbox) => parseInt(checkbox.value));
+
+	const selectedSongs = selectedIndices.map((i) => songs[i]);
+
+	console.log(playlists);
+
+	playlists.push({
+		name: name,
+		songs: selectedSongs,
+	});
+
+	form.reset();
+});
