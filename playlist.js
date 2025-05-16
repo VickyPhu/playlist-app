@@ -50,3 +50,7 @@ form.addEventListener('submit', (e) => {
 
 	form.reset();
 });
+
+cancelBtn.addEventListener('click', () => {
+	form.reset();
+});
